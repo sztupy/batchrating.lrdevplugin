@@ -6,9 +6,9 @@ local LrApplication = import 'LrApplication'
 
 local function showCustomDialog()
 
-	LrFunctionContext.callWithContext( "showCustomDialog", function( context )
+  LrFunctionContext.callWithContext( "showCustomDialog", function( context )
 
-	    local f = LrView.osFactory()
+      local f = LrView.osFactory()
 
       local filenames_field = f:edit_field {
         title = "filenames",
@@ -31,8 +31,8 @@ local function showCustomDialog()
         value = ''
       }
 
-	    local c = f:column {
-		    filenames_field,
+      local c = f:column {
+        filenames_field,
         rating_field,
         f:push_button {
           title = "Update",
@@ -42,11 +42,12 @@ local function showCustomDialog()
 
               local catalog = import "LrApplication".activeCatalog()
               catalog:withWriteAccessDo("Batch set rating", function( context )
-                for i,photo in ipairs(catalog:getAllPhotos()) do
+                for i,photo in ipairs(catalog:getMultipleSelectedOrAllPhotos()) do
                   for fname in string.gmatch(filenames_field.value, "%w+") do
                     if string.find(photo:getFormattedMetadata('fileName'), fname) then
                       logs_field.value = logs_field.value .. "Found filename: " .. fname .. "\n"
                       photo:setRawMetadata('label', rating_field.value)
+											photo:setRawMetadata('colorNameForLabel', rating_field.value)
                     end
                   end
                 end
@@ -56,14 +57,14 @@ local function showCustomDialog()
           end
         },
         logs_field
-	    }
+      }
 
-	    LrDialogs.presentModalDialog {
-			    title = "Batch Rating",
-			    contents = c
-		  }
+      LrDialogs.presentModalDialog {
+          title = "Batch Rating",
+          contents = c
+      }
 
-	end)
+  end)
 end
 
 showCustomDialog()

@@ -47,7 +47,7 @@ local function showCustomDialog()
                     if string.find(photo:getFormattedMetadata('fileName'), fname) then
                       logs_field.value = logs_field.value .. "Found filename: " .. fname .. "\n"
                       photo:setRawMetadata('label', rating_field.value)
-											photo:setRawMetadata('colorNameForLabel', rating_field.value)
+                      photo:setRawMetadata('colorNameForLabel', rating_field.value)
                     end
                   end
                 end
